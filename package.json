@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "cli-chart": "^0.3.1"
+  }
+}
