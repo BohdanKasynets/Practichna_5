@@ -2,20 +2,20 @@ const Chart = require('cli-chart');
 
 class Task {
     constructor(id, duration, dependencies = []) {
-        this.id = id;  // Унікальний ідентифікатор задачі
-        this.duration = duration;  // Тривалість виконання задачі
-        this.dependencies = dependencies;  // Список ідентифікаторів задач, від яких залежить дана задача
-        this.earliestStart = 0;  // Найраніший старт (обчислюється)
-        this.latestStart = 0;  // Найпізніший старт (обчислюється)
+        this.id = id;  
+        this.duration = duration;  
+        this.dependencies = dependencies;  
+        this.earliestStart = 0;  
+        this.latestStart = 0;  
     }
 }
 
 function calculateSchedule(tasks) {
-    // Побудова графу задач
+  
     const taskMap = new Map();
     tasks.forEach(task => taskMap.set(task.id, task));
 
-    // Функція для обчислення найранішого старту задач
+   
     function calculateEarliestStart(task) {
         if (task.earliestStart !== 0) return task.earliestStart;
         let earliest = 0;
@@ -27,13 +27,11 @@ function calculateSchedule(tasks) {
         return earliest;
     }
 
-    // Обчислення найранішого старту для всіх задач
     tasks.forEach(task => calculateEarliestStart(task));
 
-    // Визначення максимального часу завершення проекту
     const projectCompletionTime = Math.max(...tasks.map(task => task.earliestStart + task.duration));
 
-    // Функція для обчислення найпізнішого старту задач
+  
     function calculateLatestStart(task) {
         if (task.latestStart !== 0) return task.latestStart;
         if (task.dependencies.length === 0) {
@@ -49,10 +47,10 @@ function calculateSchedule(tasks) {
         return task.latestStart;
     }
 
-    // Обчислення найпізнішого старту для всіх задач
+
     tasks.forEach(task => calculateLatestStart(task));
 
-    // Обчислення резерву часу для всіх задач
+ 
     tasks.forEach(task => {
         task.reserve = task.latestStart - task.earliestStart;
     });
@@ -61,7 +59,7 @@ function calculateSchedule(tasks) {
 }
 
 function readInput(input) {
-    // Парсинг JSON-даних про задачі
+
     return input.map(data => new Task(data.id, data.duration, data.dependencies));
 }
 
